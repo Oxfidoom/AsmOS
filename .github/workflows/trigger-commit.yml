@@ -1,1 +1,26 @@
 
+name: Triggered Commit from Web
+
+on:
+  repository_dispatch:
+    types: [tombol_commit_web] # Ini adalah nama event yang dipanggil dari HTML
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # Contoh tindakan: memperbarui file log setiap kali tombol ditekan
+    - name: Perbarui Log Trigger
+      run: |
+        echo "Ditriger dari web pada: $(date)" >> log_trigger.txt
+
+    - name: Commit dan Push
+      run: |
+        git config --global user.name "Web Trigger Bot"
+        git config --global user.email "bot@github.com"
+        git add log_trigger.txt
+        git commit -m "Commit otomatis via Trigger Website"
+        git push
