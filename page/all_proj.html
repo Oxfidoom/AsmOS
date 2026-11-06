@@ -1,9 +1,57 @@
 <!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>AsmOS Project</title>
+</head>
 <body>
   <h1>PROJECT</h1>
-<pre>
+  <pre>
   <a href="https://oxfidoom.github.io/AsmOS/page/grafp1.html">grafp 0.1</a>
   <a href="https://oxfidoom.github.io/AsmOS/page/heron-f95.html">heron f95</a>
   <a href="https://oxfidoom.github.io/AsmOS/page/faktorial-f95.html">faktorial f95</a>
-</pre>
+  </pre>
+
+  <hr>
+  <!-- Tombol untuk memicu commit -->
+  <button id="btnCommit" onclick="pemicuCommit()">Jalankan Auto Commit</button>
+  <p id="status"></p>
+
+  <script>
+    function pemicuCommit() {
+      const statusText = document.getElementById("status");
+      statusText.innerText = "Mengirim perintah commit...";
+
+      // GANTI DENGAN USERNAME DAN REPO ANDA YANG SEBENARNYA
+      const OWNER = "oxfidoom";
+      const REPO = "AsmOS";
+      // PENTING: Masukkan Token Github Anda di bawah ini
+      const TOKEN = "ISI_DENGAN_TOKEN_GITHUB_ANDA"; 
+
+      fetch(`https://github.com{OWNER}/${REPO}/dispatches`, {
+        method: "POST",
+        headers: {
+          "Authorization": `token ${TOKEN}`,
+          "Accept": "application/vnd.github.v3+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          event_type: "tombol_commit_web" // Harus sama dengan 'types' di file YAML
+        })
+      })
+      .then(response => {
+        if (response.status === 204) {
+          statusText.innerText = "✅ Sukses! GitHub sedang melakukan commit di latar belakang.";
+        } else {
+          statusText.innerText = "❌ Gagal memicu commit. Periksa Token atau Log Respon.";
+          console.log(response);
+        }
+      })
+      .catch(error => {
+        statusText.innerText = "❌ Terjadi kesalahan jaringan.";
+        console.error(error);
+      });
+    }
+  </script>
 </body>
+</html>
